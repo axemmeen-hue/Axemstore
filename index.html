@@ -114,12 +114,16 @@ footer .studs{height:22px;margin:-28px -16px 20px;background-size:44px 44px}
 .msg{font-size:13px;font-weight:800;text-align:center;margin-bottom:8px;min-height:16px;color:#b00}
 .sum{background:#fff0ee;border:3px dashed var(--red);border-radius:8px;padding:12px;margin-bottom:12px;font-weight:800;text-align:center}
 
-/* ===== Metode pembayaran ===== */
+/* ===== Form & metode pembayaran ===== */
+.flab{display:block;font-size:12px;font-weight:800;margin:0 0 4px 2px;color:var(--red-d)}
 .mlab{font-size:13px;font-weight:800;margin-bottom:6px;text-align:center}
-.mths{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.mths{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
 .box .mth{margin-bottom:0;font-size:14px;padding:8px;box-shadow:0 3px 0 var(--red-dd);background:#fff;color:var(--red-d);opacity:.7}
 .box .mth.on{background:var(--gold);opacity:1}
 .paybox{background:#fff0ee;border:3px dashed var(--red);border-radius:8px;padding:12px;margin-bottom:12px;font-weight:800;text-align:center;font-size:14px;line-height:1.6}
+.bigamt{font-family:'Lilita One';font-size:30px;color:var(--red-d);line-height:1.2;margin:2px 0 8px}
+.idlab{font-size:13px;font-weight:800;color:#b00;margin-top:10px}
+.bigid{font-family:'Lilita One';font-size:40px;letter-spacing:4px;background:var(--gold);color:var(--red-dd);border:4px solid var(--red-dd);border-radius:10px;padding:8px;margin-top:6px;box-shadow:0 5px 0 var(--red-dd);word-break:break-all}
 .hint{font-size:12px;font-weight:700;opacity:.7;text-align:center;margin-bottom:10px}
 
 /* ===== Pesanan Saya ===== */
@@ -190,9 +194,9 @@ footer .studs{height:22px;margin:-28px -16px 20px;background-size:44px 44px}
   <div class="wrap">
     <div class="title"><h2>Cara Order</h2></div>
     <div class="step-grid">
-      <div class="step"><div class="n">1</div><i class="fa-solid fa-hand-pointer"></i><p>Pilih produk Robux atau Role Discord</p></div>
-      <div class="step"><div class="n">2</div><i class="fa-solid fa-user-lock"></i><p>Login, isi username Roblox, dan pilih metode bayar</p></div>
-      <div class="step"><div class="n">3</div><i class="fa-solid fa-money-bill-wave"></i><p>Bayar sesuai nominal, tulis ID pesanan di catatan, lalu klik Saya Sudah Bayar</p></div>
+      <div class="step"><div class="n">1</div><i class="fa-solid fa-hand-pointer"></i><p>Pilih produk Robux atau Role Discord, lalu login</p></div>
+      <div class="step"><div class="n">2</div><i class="fa-solid fa-id-card"></i><p>Pilih metode bayar, isi nama akun e-wallet, nomor e-wallet, dan username Roblox atau Discord</p></div>
+      <div class="step"><div class="n">3</div><i class="fa-solid fa-money-bill-wave"></i><p>Bayar sesuai nominal dan TULIS ID PESANAN di catatan, lalu klik Saya Sudah Bayar</p></div>
       <div class="step"><div class="n">4</div><i class="fa-solid fa-circle-check"></i><p>Pantau status di Pesanan Saya sampai selesai</p></div>
     </div>
   </div>
@@ -231,12 +235,21 @@ footer .studs{height:22px;margin:-28px -16px 20px;background-size:44px 44px}
     <button class="close" onclick="closeM('orderModal')"><i class="fa-solid fa-xmark"></i></button>
     <h3 id="ordTitle">Konfirmasi Pesanan</h3>
     <div class="sum" id="sum"></div>
-    <div class="msg" id="ordMsg"></div>
 
     <div id="step1">
-      <input id="rbxUser" placeholder="Username Roblox">
       <div class="mlab">Metode pembayaran</div>
       <div class="mths" id="mths"></div>
+
+      <label class="flab" id="lblName">Nama akun e-wallet kamu</label>
+      <input id="sendName" placeholder="Nama pemilik akun">
+
+      <label class="flab" id="lblNum">Nomor e-wallet kamu</label>
+      <input id="sendNum" placeholder="08xxxxxxxxxx">
+
+      <label class="flab" id="lblUser">Username Roblox</label>
+      <input id="rbxUser" placeholder="Username">
+
+      <div class="msg" id="ordMsg"></div>
       <button class="btn gold" id="ordBtn"><i class="fa-solid fa-credit-card"></i> Lanjut Bayar</button>
     </div>
 
@@ -244,6 +257,7 @@ footer .studs{height:22px;margin:-28px -16px 20px;background-size:44px 44px}
       <div class="paybox" id="payInfo"></div>
       <div id="payActions"></div>
       <div class="hint">Pesanan baru tercatat setelah kamu klik tombol di bawah, jadi klik setelah selesai membayar.</div>
+      <div class="msg" id="payMsg"></div>
       <button class="btn gold" id="paidBtn"><i class="fa-solid fa-circle-check"></i> Saya Sudah Bayar</button>
       <div class="sw" id="backBtn">Ganti metode pembayaran</div>
     </div>
@@ -293,11 +307,10 @@ const firebaseConfig = {
 const ADMIN_EMAIL = "axemmeen@gmail.com";
 
 /* ====== METODE PEMBAYARAN ======
-   - number: nomor e-wallet (format lokal 08xx).
+   - number: nomor e-wallet kamu (format lokal 08xx).
    - name: nama akun e-wallet kamu (WAJIB diganti).
    - app: alamat untuk mencoba membuka aplikasinya.
-   - link: (opsional) link pembayaran dari aplikasimu. Kalau diisi, tombolnya membuka link ini
-     dan bukan membuka aplikasi.
+   - link: (opsional) link pembayaran dari aplikasimu. Kalau diisi, tombolnya membuka link ini.
    - PayPal: "user" = username PayPal.Me kamu, "rate" = kurs Rp per 1 USD,
      "fee" = tambahan biaya PayPal untuk pembeli (0.06 = 6%, isi 0 kalau tidak mau). */
 const NOMOR = "08985044833";
@@ -333,6 +346,8 @@ const methodText = o => {
   const m = PAY[o.payMethod];
   return esc(m ? m.label : (o.payMethod || "-")) + (o.amountUsd ? " (USD " + Number(o.amountUsd).toFixed(2) + ")" : "");
 };
+const userLine = o => `${esc(o.userType || "Roblox")}: ${esc(o.username || o.roblox || "-")}`;
+const senderLine = o => o.senderName ? `Pengirim: ${esc(o.senderName)} | ${esc(o.senderNumber || "-")}<br>` : "";
 
 /* ====== RENDER ====== */
 function render(){
@@ -410,6 +425,20 @@ const LABEL = {
 };
 let curOrder = null, unsub = null;
 
+/* Label form menyesuaikan metode dan jenis produk */
+function updateLabels(){
+  const m = PAY[selMethod];
+  const isRole = !!selected && selected.type === "role";
+  const pp = selMethod === "paypal";
+  $("lblUser").textContent = isRole ? "Username Discord" : "Username Roblox";
+  $("rbxUser").placeholder = isRole ? "Ketik username Discord kamu" : "Ketik username Roblox kamu";
+  $("lblName").textContent = `Nama akun ${m.label} kamu`;
+  $("sendName").placeholder = "Nama pemilik akun";
+  $("lblNum").textContent = pp ? "Email PayPal kamu" : `Nomor ${m.label} kamu`;
+  $("sendNum").placeholder = pp ? "email@contoh.com" : "08xxxxxxxxxx";
+  $("sendNum").inputMode = pp ? "email" : "numeric";
+}
+
 function renderMethods(){
   $("mths").innerHTML = Object.entries(PAY).map(([k,m]) =>
     `<button type="button" class="btn mth ${k === selMethod ? "on" : ""}" data-m="${k}"><i class="${m.icon}"></i> ${m.label}</button>`
@@ -417,6 +446,7 @@ function renderMethods(){
   document.querySelectorAll("#mths .mth").forEach(b => b.onclick = () => {
     selMethod = b.dataset.m; renderMethods();
   });
+  updateLabels();
 }
 
 function buy(id){
@@ -427,6 +457,7 @@ function buy(id){
   $("step1").style.display = "block";
   $("step2").style.display = "none";
   $("ordMsg").textContent = "";
+  $("payMsg").textContent = "";
   curOrder = null;
   renderMethods();
   openM("orderModal");
@@ -442,6 +473,11 @@ function copyText(t){
   try{ document.execCommand("copy"); }catch(e){}
   document.body.removeChild(a);
 }
+function copyId(btn){
+  if(!curOrder) return;
+  copyText(curOrder.code);
+  btn.innerHTML = '<i class="fa-solid fa-check"></i> ID tersalin';
+}
 
 /* Langsung arahkan ke pembayaran (dipanggil dari klik tombol) */
 function launchPay(){
@@ -455,43 +491,68 @@ function launchPay(){
   else if(m.app){ window.location.href = m.app; }
 }
 
-function showPay(orderId){
-  const m = PAY[selMethod], code = orderId.slice(0,8).toUpperCase();
+function showPay(code){
+  const m = PAY[selMethod];
+  const idBox = `
+    <div class="idlab">WAJIB TULIS ID INI DI CATATAN / NOTE:</div>
+    <div class="bigid">${code}</div>`;
   if(selMethod === "paypal"){
     const usd = usdOf(selected.price);
-    $("payInfo").innerHTML = `Bayar <b>USD ${usd.toFixed(2)}</b><br>
-      <small>(setara ${rp(selected.price)} + biaya PayPal)</small><br>
-      Tulis ID pesanan di catatan:<br><b>${code}</b>`;
-    $("payActions").innerHTML = `<button class="btn light" onclick="launchPay()"><i class="fa-brands fa-paypal"></i> Buka PayPal</button>`;
+    $("payInfo").innerHTML = `Bayar sebesar
+      <div class="bigamt">USD ${usd.toFixed(2)}</div>
+      <small>(setara ${rp(selected.price)} + biaya PayPal)</small>${idBox}`;
+    $("payActions").innerHTML = `
+      <button class="btn light" onclick="launchPay()"><i class="fa-brands fa-paypal"></i> Buka PayPal</button>
+      <button class="btn light" onclick="copyId(this)"><i class="fa-solid fa-copy"></i> Salin ID Pesanan</button>`;
   }else{
-    $("payInfo").innerHTML = `Transfer tepat <b>${rp(selected.price)}</b><br>
+    $("payInfo").innerHTML = `Transfer tepat
+      <div class="bigamt">${rp(selected.price)}</div>
       ${esc(m.label)}: <b>${esc(m.number)}</b><br>a.n. ${esc(m.name)}<br>
-      <small>Nomor sudah otomatis tersalin.</small><br>
-      Tulis ID pesanan di catatan:<br><b>${code}</b>`;
-    $("payActions").innerHTML = `<button class="btn light" onclick="launchPay()"><i class="${m.icon}"></i> Buka ${esc(m.label)} / Salin Nomor</button>`;
+      <small>Nomor sudah otomatis tersalin.</small>${idBox}`;
+    $("payActions").innerHTML = `
+      <button class="btn light" onclick="launchPay()"><i class="${m.icon}"></i> Buka ${esc(m.label)} / Salin Nomor</button>
+      <button class="btn light" onclick="copyId(this)"><i class="fa-solid fa-copy"></i> Salin ID Pesanan</button>`;
   }
 }
 
 /* Lanjut Bayar: BELUM menyimpan pesanan, hanya menyiapkan data dan membuka pembayaran */
 $("ordBtn").onclick = () => {
-  const rbx = $("rbxUser").value.trim();
-  if(!rbx){ $("ordMsg").textContent = "Isi username Roblox dulu."; return; }
+  const m = PAY[selMethod];
+  const isRole = selected.type === "role";
+  const pp = selMethod === "paypal";
+  const user = $("rbxUser").value.trim();
+  const sName = $("sendName").value.trim();
+  let sNum = $("sendNum").value.trim();
+
+  if(!sName){ $("ordMsg").textContent = `Isi nama akun ${m.label} kamu dulu.`; return; }
+  if(pp){
+    if(!/^\S+@\S+\.\S+$/.test(sNum)){ $("ordMsg").textContent = "Isi email PayPal yang benar."; return; }
+  }else{
+    sNum = sNum.replace(/[\s\-+]/g, "");
+    if(!/^\d{8,15}$/.test(sNum)){ $("ordMsg").textContent = `Isi nomor ${m.label} yang benar (angka saja).`; return; }
+  }
+  if(!user){ $("ordMsg").textContent = `Isi username ${isRole ? "Discord" : "Roblox"} dulu.`; return; }
+
   const u = auth.currentUser;
   const ref = db.collection("orders").doc();   // hanya membuat ID, belum menulis ke database
+  const code = ref.id.slice(0,8).toUpperCase();
   const data = {
-    uid: u.uid, email: u.email, roblox: rbx,
+    uid: u.uid, email: u.email,
+    username: user, userType: isRole ? "Discord" : "Roblox",
+    senderName: sName, senderNumber: sNum,
     productId: selected.id, product: selected.name, price: selected.price,
     payMethod: selMethod,
     status: "waiting"
   };
-  if(selMethod === "paypal") data.amountUsd = usdOf(selected.price);
-  curOrder = {ref, data};
+  if(pp) data.amountUsd = usdOf(selected.price);
+  curOrder = {ref, data, code};
 
   $("ordTitle").textContent = "Pembayaran";
   $("step1").style.display = "none";
   $("step2").style.display = "block";
   $("ordMsg").textContent = "";
-  showPay(ref.id);
+  $("payMsg").textContent = "";
+  showPay(code);
   launchPay();
 };
 
@@ -512,7 +573,7 @@ $("paidBtn").onclick = async () => {
     closeM("orderModal");
     openMy();
   }catch(err){
-    $("ordMsg").textContent = "Gagal menyimpan pesanan. Coba lagi.";
+    $("payMsg").textContent = "Gagal menyimpan pesanan. Coba lagi.";
   }
   $("paidBtn").disabled = false;
 };
@@ -524,7 +585,8 @@ function openMy(){
     const rows = s.docs.map(d => ({id:d.id, ...d.data()}))
       .sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
     $("myList").innerHTML = rows.map(o => `
-      <div class="ord">${esc(o.product)}<br>${rp(o.price)} | ${esc(o.roblox)}<br>
+      <div class="ord">${esc(o.product)}<br>${rp(o.price)}<br>
+      ${userLine(o)}<br>
       Metode: ${methodText(o)}<br>
       <small>ID ${o.id.slice(0,8).toUpperCase()}</small><br>
       <span class="st ${o.status}">${LABEL[o.status] || esc(o.status)}</span></div>`).join("")
@@ -564,7 +626,8 @@ function renderAdmin(){
       <div class="ord">
         ${esc(o.product)} - ${rp(o.price)}<br>
         Metode: ${methodText(o)}<br>
-        Roblox: ${esc(o.roblox)}<br>
+        ${senderLine(o)}
+        ${userLine(o)}<br>
         ${esc(o.email)}<br>
         <small>ID ${o.id.slice(0,8).toUpperCase()} | ${t}</small><br>
         <span class="st ${o.status}">${LABEL[o.status] || esc(o.status)}</span>
@@ -590,4 +653,4 @@ async function setStatus(id, st){
 render();
 </script>
 </body>
-</html>
+</html>7u
