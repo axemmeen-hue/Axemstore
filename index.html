@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AxemStore - Robux & Role Discord</title>
+<title>AxemStore - Robux, Role Discord & Key Executor</title>
 <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
@@ -83,7 +83,7 @@ section{padding:56px 16px}
 .card .btn{width:100%;justify-content:center}
 .tag{position:absolute;top:10px;right:10px;background:var(--gold);color:var(--red-dd);font-size:11px;font-weight:800;padding:2px 8px;border-radius:5px;border:2px solid var(--red-dd)}
 
-.tabs{display:flex;justify-content:center;gap:10px;margin-bottom:34px}
+.tabs{display:flex;justify-content:center;gap:10px;margin-bottom:34px;flex-wrap:wrap}
 .tabs .btn{opacity:.55}
 .tabs .btn.on{opacity:1}
 
@@ -141,6 +141,8 @@ footer .studs{height:22px;margin:-28px -16px 20px;background-size:44px 44px}
 .st.rejected{background:#ffc2c2}
 #myList,#adminList{max-height:60vh;overflow:auto}
 .empty{text-align:center;font-weight:800}
+.keybox{background:#fff0ee;border:3px dashed var(--red);border-radius:8px;padding:8px;margin:6px 0;word-break:break-all}
+.box .keybox .btn{width:auto;margin:6px 0 0;font-size:13px;padding:5px 10px;box-shadow:0 3px 0 var(--red-dd)}
 
 /* ===== Panel Admin ===== */
 .badge-n{background:var(--gold);color:var(--red-dd);border:2px solid var(--red-dd);border-radius:10px;font-size:11px;padding:0 6px;margin-left:2px}
@@ -174,7 +176,7 @@ footer .studs{height:22px;margin:-28px -16px 20px;background-size:44px 44px}
 
 <div class="hero studs">
   <h1>AXEMSTORE</h1>
-  <p>Top up Robux dan Role Discord dengan harga murah, aman, dan proses cepat.</p>
+  <p>Top up Robux, Role Discord, dan Key Executor dengan harga murah, aman, dan proses cepat.</p>
   <div class="cta">
     <a href="#produk" class="btn gold"><i class="fa-solid fa-cart-shopping"></i> Belanja Sekarang</a>
     <a href="#cara" class="btn light"><i class="fa-solid fa-circle-question"></i> Cara Order</a>
@@ -192,6 +194,7 @@ footer .studs{height:22px;margin:-28px -16px 20px;background-size:44px 44px}
     <div class="tabs">
       <button class="btn on" data-t="robux"><i class="fa-solid fa-coins"></i> Robux</button>
       <button class="btn" data-t="role"><i class="fa-brands fa-discord"></i> Role Discord</button>
+      <button class="btn" data-t="key"><i class="fa-solid fa-key"></i> Key Executor</button>
     </div>
     <div class="grid" id="grid"></div>
   </div>
@@ -201,10 +204,10 @@ footer .studs{height:22px;margin:-28px -16px 20px;background-size:44px 44px}
   <div class="wrap">
     <div class="title"><h2>Cara Order</h2></div>
     <div class="step-grid">
-      <div class="step"><div class="n">1</div><i class="fa-solid fa-hand-pointer"></i><p>Pilih produk Robux atau Role Discord, lalu login</p></div>
-      <div class="step"><div class="n">2</div><i class="fa-solid fa-id-card"></i><p>Pilih metode bayar, isi nama akun e-wallet, nomor e-wallet, dan username Roblox atau Discord</p></div>
+      <div class="step"><div class="n">1</div><i class="fa-solid fa-hand-pointer"></i><p>Pilih produk Robux, Role Discord, atau Key Executor, lalu login</p></div>
+      <div class="step"><div class="n">2</div><i class="fa-solid fa-id-card"></i><p>Pilih metode bayar, isi nama akun dan nomor e-wallet (serta username Roblox atau Discord untuk Robux dan Role)</p></div>
       <div class="step"><div class="n">3</div><i class="fa-solid fa-camera"></i><p>Bayar sesuai nominal, lalu upload foto bukti transfer maksimal 20 menit</p></div>
-      <div class="step"><div class="n">4</div><i class="fa-solid fa-circle-check"></i><p>Pantau status di Pesanan Saya sampai selesai</p></div>
+      <div class="step"><div class="n">4</div><i class="fa-solid fa-circle-check"></i><p>Pantau status di Pesanan Saya sampai selesai. Key akan muncul di sana</p></div>
     </div>
   </div>
 </section>
@@ -343,17 +346,18 @@ const PAY_MINUTES = 20;
      "fee" = tambahan biaya PayPal untuk pembeli (0.06 = 6%, isi 0 kalau tidak mau). */
 const NOMOR = "08985044833";
 const PAY = {
-  dana:   {label:"DANA",   icon:"fa-solid fa-wallet",               number:NOMOR, name:"axemstoreid", app:"dana://",  link:""},
-  gopay:  {label:"GoPay",  icon:"fa-solid fa-mobile-screen-button", number:NOMOR, name:"axemstoreid", app:"gojek://", link:""},
-  ovo:    {label:"OVO",    icon:"fa-solid fa-money-bill-wave",      number:NOMOR, name:"Axem", app:"ovo://",   link:""},
-  paypal: {label:"PayPal", icon:"fa-brands fa-paypal",              user:"@AxemStore", rate:16000, fee:0.06}
+  dana:   {label:"DANA",   icon:"fa-solid fa-wallet",               number:NOMOR, name:"Nama Kamu", app:"dana://",  link:""},
+  gopay:  {label:"GoPay",  icon:"fa-solid fa-mobile-screen-button", number:NOMOR, name:"Nama Kamu", app:"gojek://", link:""},
+  ovo:    {label:"OVO",    icon:"fa-solid fa-money-bill-wave",      number:NOMOR, name:"Nama Kamu", app:"ovo://",   link:""},
+  paypal: {label:"PayPal", icon:"fa-brands fa-paypal",              user:"USERNAME_PAYPALME", rate:16000, fee:0.06}
 };
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-/* ====== DATA PRODUK (default, ditimpa Firestore koleksi "products" jika ada) ====== */
+/* ====== DATA PRODUK (default, ditimpa Firestore koleksi "products" jika ada) ======
+   type: "robux" | "role" | "key" */
 let products = [
   {id:"r1",type:"robux",name:"80 Robux",price:15000,desc:"Paket hemat awal"},
   {id:"r2",type:"robux",name:"400 Robux",price:70000,desc:"Paling sering dibeli",tag:"POPULER"},
@@ -361,8 +365,10 @@ let products = [
   {id:"r4",type:"robux",name:"1.700 Robux",price:280000,desc:"Bonus lebih banyak"},
   {id:"r5",type:"robux",name:"4.500 Robux",price:700000,desc:"Paket sultan",tag:"HEMAT"},
   {id:"d1",type:"role",name:"Role Executor",price:13589,desc:"Role Executor di server Discord"},
-  {id:"d2",type:"role",name:"Role Notification",price:7899,desc:"Role Notification di server Discord"}
+  {id:"d2",type:"role",name:"Role Notification",price:7899,desc:"Role Notification di server Discord"},
+  {id:"k1",type:"key",name:"Delta Premium Android 30 Hari",price:150000,desc:"Key Delta Premium untuk Android, aktif 30 hari"}
 ];
+const ICON = {robux:"fa-solid fa-coins", role:"fa-brands fa-discord", key:"fa-solid fa-key"};
 let tab = "robux", selected = null, authMode = "login", selMethod = "dana";
 const $ = id => document.getElementById(id);
 const rp = n => "Rp " + Number(n).toLocaleString("id-ID");
@@ -374,7 +380,9 @@ const methodText = o => {
   const m = PAY[o.payMethod];
   return esc(m ? m.label : (o.payMethod || "-")) + (o.amountUsd ? " (USD " + Number(o.amountUsd).toFixed(2) + ")" : "");
 };
-const userLine = o => `${esc(o.userType || "Roblox")}: ${esc(o.username || o.roblox || "-")}`;
+/* Baris username (kosong untuk produk Key) */
+const userLine = o => (o.username || o.roblox)
+  ? `${esc(o.userType || "Roblox")}: ${esc(o.username || o.roblox)}<br>` : "";
 const senderLine = o => o.senderName ? `Pengirim: ${esc(o.senderName)} | ${esc(o.senderNumber || "-")}<br>` : "";
 
 /* ====== RENDER ====== */
@@ -383,7 +391,7 @@ function render(){
   $("grid").innerHTML = list.map(p => `
     <div class="card">
       ${p.tag ? `<span class="tag">${esc(p.tag)}</span>` : ""}
-      <div class="ic"><i class="${p.type==="robux" ? "fa-solid fa-coins" : "fa-brands fa-discord"}"></i></div>
+      <div class="ic"><i class="${ICON[p.type] || "fa-solid fa-cube"}"></i></div>
       <h3>${esc(p.name)}</h3>
       <div class="desc">${esc(p.desc || "")}</div>
       <div class="price">${rp(p.price)}</div>
@@ -458,7 +466,10 @@ let timerId = null, deadline = 0;
 function updateLabels(){
   const m = PAY[selMethod];
   const isRole = !!selected && selected.type === "role";
+  const isKey = !!selected && selected.type === "key";
   const pp = selMethod === "paypal";
+  $("lblUser").style.display = isKey ? "none" : "";
+  $("rbxUser").style.display = isKey ? "none" : "";
   $("lblUser").textContent = isRole ? "Username Discord" : "Username Roblox";
   $("rbxUser").placeholder = isRole ? "Ketik username Discord kamu" : "Ketik username Roblox kamu";
   $("lblName").textContent = `Nama akun ${m.label} kamu`;
@@ -545,6 +556,10 @@ function copyText(t){
   try{ document.execCommand("copy"); }catch(e){}
   document.body.removeChild(a);
 }
+function copyKey(btn){
+  copyText(btn.dataset.k);
+  btn.innerHTML = '<i class="fa-solid fa-check"></i> Tersalin';
+}
 
 /* Langsung arahkan ke pembayaran (dipanggil dari klik tombol) */
 function launchPay(){
@@ -618,6 +633,7 @@ $("proofFile").onchange = async e => {
 $("ordBtn").onclick = () => {
   const m = PAY[selMethod];
   const isRole = selected.type === "role";
+  const isKey = selected.type === "key";
   const pp = selMethod === "paypal";
   const user = $("rbxUser").value.trim();
   const sName = $("sendName").value.trim();
@@ -630,19 +646,23 @@ $("ordBtn").onclick = () => {
     sNum = sNum.replace(/[\s\-+]/g, "");
     if(!/^\d{8,15}$/.test(sNum)){ $("ordMsg").textContent = `Isi nomor ${m.label} yang benar (angka saja).`; return; }
   }
-  if(!user){ $("ordMsg").textContent = `Isi username ${isRole ? "Discord" : "Roblox"} dulu.`; return; }
+  if(!isKey && !user){ $("ordMsg").textContent = `Isi username ${isRole ? "Discord" : "Roblox"} dulu.`; return; }
 
   const u = auth.currentUser;
   const ref = db.collection("orders").doc();   // hanya membuat ID, belum menulis ke database
   const data = {
     uid: u.uid, email: u.email,
-    username: user, userType: isRole ? "Discord" : "Roblox",
     senderName: sName, senderNumber: sNum,
-    productId: selected.id, product: selected.name, price: selected.price,
+    productId: selected.id, productType: selected.type,
+    product: selected.name, price: selected.price,
     payMethod: selMethod,
     hasProof: true,
     status: "waiting"
   };
+  if(!isKey){
+    data.username = user;
+    data.userType = isRole ? "Discord" : "Roblox";
+  }
   if(pp) data.amountUsd = usdOf(selected.price);
   curOrder = {ref, data};
 
@@ -697,9 +717,12 @@ function openMy(){
       .sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
     $("myList").innerHTML = rows.map(o => `
       <div class="ord">${esc(o.product)}<br>${rp(o.price)}<br>
-      ${userLine(o)}<br>
+      ${userLine(o)}
       Metode: ${methodText(o)}<br>
-      <span class="st ${o.status}">${LABEL[o.status] || esc(o.status)}</span></div>`).join("")
+      <span class="st ${o.status}">${LABEL[o.status] || esc(o.status)}</span>
+      ${o.keyValue ? `<div class="keybox">Key kamu:<br><b>${esc(o.keyValue)}</b><br>
+        <button class="btn sm light" data-k="${esc(o.keyValue)}" onclick="copyKey(this)"><i class="fa-solid fa-copy"></i> Salin Key</button></div>` : ""}
+      </div>`).join("")
       || "<p class='empty'>Belum ada pesanan.</p>";
   });
 }
@@ -737,10 +760,11 @@ function renderAdmin(){
         ${esc(o.product)} - ${rp(o.price)}<br>
         Metode: ${methodText(o)}<br>
         ${senderLine(o)}
-        ${userLine(o)}<br>
+        ${userLine(o)}
         ${esc(o.email)}<br>
         <small>${t}</small><br>
         <span class="st ${o.status}">${LABEL[o.status] || esc(o.status)}</span>
+        ${o.keyValue ? `<br><small>Key terkirim: ${esc(o.keyValue)}</small>` : ""}
         ${o.hasProof ? `<br><button class="btn light proofbtn" onclick="showProof('${o.id}')"><i class="fa-solid fa-image"></i> Lihat Bukti</button>` : ""}
         ${final ? "" : `
         <div class="acts">
@@ -769,10 +793,18 @@ async function showProof(id){
 }
 
 async function setStatus(id, st){
-  const msg = st === "done" ? "Tandai pesanan ini SELESAI?" : "TOLAK pesanan ini?";
-  if(!confirm(msg)) return;
+  const o = adminRows.find(x => x.id === id);
+  const upd = {status: st};
+  if(st === "done" && o && o.productType === "key"){
+    const k = prompt("Tempel key untuk pembeli (akan tampil di Pesanan Saya mereka):");
+    if(!k || !k.trim()) return;
+    upd.keyValue = k.trim();
+  }else{
+    const msg = st === "done" ? "Tandai pesanan ini SELESAI?" : "TOLAK pesanan ini?";
+    if(!confirm(msg)) return;
+  }
   try{
-    await db.collection("orders").doc(id).update({status: st});
+    await db.collection("orders").doc(id).update(upd);
   }catch(err){
     alert("Gagal mengubah status.");
   }
